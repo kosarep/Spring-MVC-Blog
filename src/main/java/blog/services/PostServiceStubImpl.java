@@ -7,6 +7,8 @@ import org.springframework.stereotype.Service;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static java.util.stream.Collectors.toList;
+
 /**
  * Created by jf194405 on 2017-06-01.
  */
@@ -32,7 +34,10 @@ public class PostServiceStubImpl implements PostService {
 
     @Override
     public List<Post> findLatest5() {
-        return this.posts.stream().sorted((a, b) -> b.getDate().compareTo(a.getDate())).limit(5).collect(Collectors.toList());
+        return this.posts.stream()
+                .sorted((a, b) -> b.getDate().compareTo(a.getDate()))
+                .limit(5)
+                .collect(toList());
     }
 
     @Override
@@ -42,7 +47,7 @@ public class PostServiceStubImpl implements PostService {
 
     @Override
     public Post create(Post post) {
-        post.setId(this.posts.stream().mapToLong(p -> p.getId()).max().getAsLong() + 1);
+        post.setId(this.posts.stream().mapToLong(Post::getId).max().getAsLong() + 1);
         this.posts.add(post);
         return post;
     }
